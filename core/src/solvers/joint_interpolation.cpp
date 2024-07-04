@@ -80,8 +80,8 @@ PlannerInterface::Result JointInterpolationPlanner::plan(const planning_scene::P
 	if (from->isStateColliding(from_state, jmg->getName()))
 		return { false, "Start state is in collision!" };
 
-	if (!from_state.satisfiesBounds(jmg))
-		return { false, "Start state is out of bounds!" };
+	//if (!from_state.satisfiesBounds(jmg))
+	//	return { false, "Start state is out of bounds!" };
 
 	moveit::core::RobotState waypoint(from_state);
 	double delta = d < 1e-6 ? 1.0 : props.get<double>("max_step") / d;
