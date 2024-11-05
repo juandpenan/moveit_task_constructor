@@ -103,8 +103,7 @@ planning_pipeline::PlanningPipelinePtr PipelinePlanner::create(const rclcpp::Nod
 	planning_pipeline::PlanningPipelinePtr planner = entry.lock();
 	if (!planner) {
 		// create new entry
-		planner = std::make_shared<planning_pipeline::PlanningPipeline>(spec.model, node, pipeline_ns,
-		                                                                PLUGIN_PARAMETER_NAME, spec.adapter_param);
+		planner = std::make_shared<planning_pipeline::PlanningPipeline>(spec.model, node, pipeline_ns);
 		// store in cache
 		entry = planner;
 	}
@@ -125,10 +124,9 @@ PipelinePlanner::PipelinePlanner(const rclcpp::Node::SharedPtr& node, const std:
 	p.declare<double>("goal_orientation_tolerance", 1e-4, "tolerance for reaching orientation goals");
 
 	p.declare<bool>("display_motion_plans", false,
-	                "publish generated solutions on topic " + planning_pipeline::PlanningPipeline::DISPLAY_PATH_TOPIC);
+	                "publish generated solutions on topic ");
 	p.declare<bool>("publish_planning_requests", false,
-	                "publish motion planning requests on topic " +
-	                    planning_pipeline::PlanningPipeline::MOTION_PLAN_REQUEST_TOPIC);
+	                "publish motion planning requests on topic ");
 }
 
 PipelinePlanner::PipelinePlanner(const planning_pipeline::PlanningPipelinePtr& planning_pipeline)
@@ -211,7 +209,7 @@ PlannerInterface::Result PipelinePlanner::plan(const planning_scene::PlanningSce
 	::planning_interface::MotionPlanResponse res;
 	bool success = planner_->generatePlan(from, req, res);
 	result = res.trajectory;
-	return { success, success ? std::string() : moveit::core::error_code_to_string(res.error_code.val) };
+	return { success, success ? std::string() : moveit::core::errorCodeToString(res.error_code.val) };
 }
 }  // namespace solvers
 }  // namespace task_constructor
